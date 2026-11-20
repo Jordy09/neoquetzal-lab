@@ -76,7 +76,7 @@ jobs:
         run: docker build -f fase5/docker/Dockerfile.${VERSION} -t neoquetzal-api:${VERSION} ./${VERSION}
 
       - name: Trivy - reporte completo (no bloquea)
-        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: neoquetzal-api:${{ env.VERSION }}
           format: table
@@ -86,7 +86,7 @@ jobs:
           exit-code: "0"
 
       - name: Trivy - JSON para el informe
-        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: neoquetzal-api:${{ env.VERSION }}
           format: json
@@ -96,7 +96,7 @@ jobs:
           skip-setup-trivy: true
 
       - name: SBOM CycloneDX de la imagen
-        uses: anchore/sbom-action@fffec3d851af758d56fee099cf3fbf8aa8779843 # v0.24.3
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
         with:
           image: neoquetzal-api:${{ env.VERSION }}
           format: cyclonedx-json
@@ -134,7 +134,7 @@ jobs:
 
       # Gate: CRITICAL/HIGH que ya tienen parche disponible, o secretos dentro de la imagen
       - name: Trivy - Quality Gate (CRITICAL/HIGH con parche)
-        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: neoquetzal-api:${{ env.VERSION }}
           format: table
