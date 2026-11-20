@@ -1,0 +1,164 @@
+# =====================================================================
+# NeoQuetzal-lab - Pipeline Fase 5: IaC Hardening + Container Scanning
+# Entregable 3 - Seguridad en Aplicaciones (UMG)
+#
+# Controles:
+#   1. Checkov  -> Terraform (AWS), manifiestos Kubernetes (EKS) y Dockerfile
+#   2. Trivy    -> imagen Docker de la API (CVE del SO y de librerias) + secretos
+#   3. Syft     -> SBOM CycloneDX de la imagen
+#   4. Quality Gate -> si Checkov falla o Trivy encuentra CRITICAL/HIGH con parche, el build FALLA
+#
+# Para pasar de FAILED a SUCCESS: cambiar VERSION de "vulnerable" a "secure"
+# (o ejecutarlo a mano desde Actions -> Run workflow eligiendo la version).
+# Las acciones de terceros estan fijadas por SHA (lo visto en clase sobre cadena de suministro).
+# =====================================================================
+name: Fase 5 - IaC y Contenedores
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version a analizar"
+        type: choice
+        options: [vulnerable, secure]
+        default: vulnerable
+
+env:
+  VERSION: ${{ github.event.inputs.version || 'vulnerable' }}
+
+permissions:
+  contents: read
+
+jobs:
+  iac-checkov:
+    name: Checkov (Terraform, Kubernetes, Dockerfile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Checkov
+        run: pip install checkov==3.4.5
+
+      - name: Escaneo IaC (${{ env.VERSION }})
+        run: |
+          mkdir -p reportes
+          fallo=0
+          for objetivo in "terraform:-d fase5/infra/${VERSION}" \
+                          "kubernetes:-d fase5/k8s/${VERSION}" \
+                          "dockerfile:-f fase5/docker/Dockerfile.${VERSION}"; do
+            nombre="${objetivo%%:*}"; ruta="${objetivo#*:}"
+            echo "=============== Checkov: $nombre ==============="
+            checkov $ruta --framework $nombre --compact -o cli -o sarif \
+                    --output-file-path console,reportes/checkov-$nombre.sarif || fallo=1
+          done
+          exit $fallo
+
+      - name: Guardar reportes
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: checkov-${{ env.VERSION }}
+          path: reportes/
+
+  contenedor-trivy:
+    name: Trivy (imagen de la API) + SBOM
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Construir imagen (${{ env.VERSION }})
+        run: docker build -f fase5/docker/Dockerfile.${VERSION} -t neoquetzal-api:${VERSION} ./${VERSION}
+
+      - name: Trivy - reporte completo (no bloquea)
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          image-ref: neoquetzal-api:${{ env.VERSION }}
+          format: table
+          output: trivy-reporte.txt
+          scanners: vuln,secret
+          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+          exit-code: "0"
+
+      - name: Trivy - JSON para el informe
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          image-ref: neoquetzal-api:${{ env.VERSION }}
+          format: json
+          output: trivy-reporte.json
+          scanners: vuln,secret
+          exit-code: "0"
+          skip-setup-trivy: true
+
+      - name: SBOM CycloneDX de la imagen
+        uses: anchore/sbom-action@fffec3d851af758d56fee099cf3fbf8aa8779843 # v0.24.3
+        with:
+          image: neoquetzal-api:${{ env.VERSION }}
+          format: cyclonedx-json
+          output-file: sbom-imagen.cyclonedx.json
+          upload-artifact: false
+
+      - name: Guardar reportes
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trivy-${{ env.VERSION }}
+          path: |
+            trivy-reporte.txt
+            trivy-reporte.json
+            sbom-imagen.cyclonedx.json
+
+      - name: Resumen de Trivy
+        if: always()
+        run: |
+          python3 - <<'EOF' >> "$GITHUB_STEP_SUMMARY"
+          import json, collections
+          d = json.load(open("trivy-reporte.json"))
+          c = collections.Counter()
+          secretos = 0
+          for r in d.get("Results", []):
+              for v in r.get("Vulnerabilities") or []:
+                  c[v["Severity"]] += 1
+              secretos += len(r.get("Secrets") or [])
+          print("### Trivy - imagen neoquetzal-api:" + "${{ env.VERSION }}")
+          print("| Severidad | Cantidad |\n|---|---|")
+          for s in ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNKNOWN"]:
+              print(f"| {s} | {c[s]} |")
+          print(f"| Secretos en la imagen | {secretos} |")
+          EOF
+
+      # Gate: CRITICAL/HIGH que ya tienen parche disponible, o secretos dentro de la imagen
+      - name: Trivy - Quality Gate (CRITICAL/HIGH con parche)
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          image-ref: neoquetzal-api:${{ env.VERSION }}
+          format: table
+          scanners: vuln,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          skip-setup-trivy: true
+
+  quality-gate:
+    name: Quality Gate Fase 5
+    runs-on: ubuntu-latest
+    needs: [iac-checkov, contenedor-trivy]
+    if: always()
+    steps:
+      - name: Resultado
+        run: |
+          echo "### Quality Gate Fase 5 - version: ${VERSION}" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Control | Resultado |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Checkov (IaC, K8s, Dockerfile) | ${{ needs.iac-checkov.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Trivy (imagen) | ${{ needs.contenedor-trivy.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ needs.iac-checkov.result }}" != "success" ] || [ "${{ needs.contenedor-trivy.result }}" != "success" ]; then
+            echo "**BUILD BLOQUEADO**: corregir o documentar la excepcion antes de desplegar." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "**BUILD APROBADO**" >> "$GITHUB_STEP_SUMMARY"
