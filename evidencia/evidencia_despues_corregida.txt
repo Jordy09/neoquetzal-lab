@@ -1,0 +1,33 @@
+===================================================================
+ NeoQuetzal-lab - EVIDENCIA 'DESPUES' (version corregida, puerto 3001)
+ Los mismos ataques de la version vulnerable ahora FALLAN.
+===================================================================
+
+### 1 - Inyeccion SQL en login (admin'--) -> ahora rechazada
+{"error":"Credenciales incorrectas"}
+
+### 2 - BOLA: Juan intenta ver la cuenta 104 de Maria -> 403
+{"error":"Acceso denegado"}
+
+### 3 - Transferencia desde cuenta ajena (104) -> 403
+{"error":"La cuenta origen no le pertenece"}
+
+### 4 - Fuerza bruta: a partir del 6o intento se bloquea (RS-03)
+   Intento 1 -> HTTP 401
+   Intento 2 -> HTTP 401
+   Intento 3 -> HTTP 401
+   Intento 4 -> HTTP 429
+   Intento 5 -> HTTP 429
+   Intento 6 -> HTTP 429
+   Intento 7 -> HTTP 429
+
+### 5 - Cabeceras de seguridad ahora presentes (helmet)
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+
+### 6 - Exfiltracion por paginacion -> topada a 100 y solo cuenta propia
+Movimientos devueltos (tope aplicado): 25
+
+===================================================================

@@ -1,0 +1,67 @@
+===================================================================
+ NeoQuetzal-lab - EVIDENCIA SAST (Analisis estatico de codigo)
+ Herramienta: Semgrep 1.183.0  |  2026-10-31 09:24
+===================================================================
+
+########## RESULTADO SOBRE LA VERSION VULNERABLE ##########
+
+                    
+                    
+┌──────────────────┐
+│ 12 Code Findings │
+└──────────────────┘
+                     
+    vulnerable/app.js
+   ❯❯❱ neoquetzal-sql-injection-concat
+          ❰❰ Blocking ❱❱
+          Consulta SQL construida por concatenacion de texto, vulnerable a inyeccion SQL (CB-06 / T-09). Usar
+          consultas parametrizadas con placeholders ? (RS-08).                                               
+                                                                                                             
+           42┆ const query = "SELECT * FROM clientes WHERE usuario = '" + usuario +
+            ⋮┆----------------------------------------
+           43┆ "' AND password = '" + password + "'";
+   
+    ❯❱ neoquetzal-error-info-leak
+          ❰❰ Blocking ❱❱
+          El mensaje de error expone detalles internos (consulta SQL) al cliente (T-17). Devolver un error
+          generico y registrar el detalle solo en el log (RS-11).                                         
+                                                                                                          
+           58┆ res.status(500).json({ error: e.message, query: query });
+   
+   ❯❯❱ neoquetzal-sql-injection-concat
+          ❰❰ Blocking ❱❱
+          Consulta SQL construida por concatenacion de texto, vulnerable a inyeccion SQL (CB-06 / T-09). Usar
+          consultas parametrizadas con placeholders ? (RS-08).                                               
+                                                                                                             
+           81┆ "SELECT * FROM movimientos WHERE cuenta_id = " + req.params.id +
+            ⋮┆----------------------------------------
+           82┆ " LIMIT " + limit                    // concatenacion -> SQLi tambien aqui
+                        
+    vulnerable/config.js
+   ❯❯❱ neoquetzal-hardcoded-secret
+          ❰❰ Blocking ❱❱
+          Secreto o credencial hardcodeado en el codigo (CB-03, CB-09 / T-05, T-13). Debe obtenerse de
+          variables de entorno o AWS Secrets Manager (RS-06).                                         
+                                                                                                      
+           14┆ JWT_SECRET: "neoquetzal123",
+            ⋮┆----------------------------------------
+           17┆ PUSH_API_KEY: "sk_live_51NqZalPushKeyHardcoded0000ABCDEF",
+            ⋮┆----------------------------------------
+           20┆ DB_USER: "admin",
+            ⋮┆----------------------------------------
+           21┆ DB_PASSWORD: "Admin2026!",
+            ⋮┆----------------------------------------
+           24┆ AWS_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE",
+            ⋮┆----------------------------------------
+           25┆ AWS_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+            ⋮┆----------------------------------------
+           28┆ DATABASE_URL: "postgres://admin:Admin2026!@db.neoquetzal.internal:5432/core",
+
+
+########## RESULTADO SOBRE LA VERSION CORREGIDA (debe salir limpio) ##########
+
+
+>> Semgrep no encontro hallazgos en la version corregida (0 findings).
+   Los controles RS-06, RS-08 y RS-11 eliminaron los defectos detectados.
+
+===================================================================

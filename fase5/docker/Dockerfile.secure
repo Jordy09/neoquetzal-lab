@@ -1,0 +1,40 @@
+# =====================================================================
+# NeoQuetzal API - Dockerfile CORREGIDO (Entregable 3, Fase 5)
+#   docker build -f docker/Dockerfile.secure -t neoquetzal-api:secure secure/
+# Correcciones: imagen minima y actualizada, multi-etapa, sin secretos,
+# solo dependencias de produccion, usuario sin privilegios y HEALTHCHECK.
+# =====================================================================
+
+# --- Etapa 1: instalar dependencias de produccion ---
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev --ignore-scripts; \
+    else npm install --omit=dev --ignore-scripts; fi && npm cache clean --force
+
+# --- Etapa 2: imagen final minima ---
+FROM node:22-alpine
+# Parches del SO al construir y eliminacion de npm/yarn/corepack de la imagen final:
+# la app no los necesita en ejecucion y sus dependencias internas suman CVE.
+RUN apk upgrade --no-cache && \
+    rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack /opt/yarn-* \
+           /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg
+ENV NODE_ENV=production
+WORKDIR /app
+RUN chown node:node /app
+
+# Solo lo necesario, con dueno sin privilegios (los secretos llegan en tiempo de
+# ejecucion desde AWS Secrets Manager, nunca dentro de la imagen)
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node *.js ./
+
+# Usuario sin privilegios (UID 1000 "node" de la imagen oficial)
+USER node
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
+
+CMD ["sh", "-c", "node --experimental-sqlite db.js && node --experimental-sqlite app.js"]

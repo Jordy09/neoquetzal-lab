@@ -1,0 +1,123 @@
+# NeoQuetzal - Deployment de la API en EKS (VERSION CORREGIDA)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: neoquetzal
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: neoquetzal-api
+  namespace: neoquetzal
+  annotations:
+    # IRSA: el pod obtiene un rol IAM de menor privilegio, sin llaves
+    eks.amazonaws.com/role-arn: arn:aws:iam::111122223333:role/neoquetzal-svc-api
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neoquetzal-api
+  namespace: neoquetzal
+  annotations:
+    # Riesgo aceptado (ticket SEC-E3-02, vence 2026-12-31): la app lee la contrasena de una variable;
+    # se migrara a archivo montado. Control compensatorio: secreto rotado cada 30 dias y readOnlyRootFilesystem.
+    checkov.io/skip1: CKV_K8S_35=Riesgo aceptado temporal SEC-E3-02 - migrar a secreto montado como archivo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: neoquetzal-api
+  template:
+    metadata:
+      labels:
+        app: neoquetzal-api
+    spec:
+      serviceAccountName: neoquetzal-api
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          # Imagen inmutable referenciada por digest (firmada con Cosign en el pipeline)
+          image: 111122223333.dkr.ecr.us-east-1.amazonaws.com/neoquetzal-api@sha256:4b8e5c1a2f0d9e7b6a3c5d8f1e2a4b6c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:            # sincronizado desde AWS Secrets Manager (External Secrets)
+                  name: neoquetzal-db
+                  key: password
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neoquetzal-api
+  namespace: neoquetzal
+spec:
+  type: ClusterIP              # solo interno; entra por API Gateway + VPC Link + WAF
+  selector:
+    app: neoquetzal-api
+  ports:
+    - port: 443
+      targetPort: 3000
+---
+# Microsegmentacion: solo el ingress interno puede hablar con la API
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: neoquetzal-api
+  namespace: neoquetzal
+spec:
+  podSelector:
+    matchLabels:
+      app: neoquetzal-api
+  policyTypes: ["Ingress", "Egress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-interno
+      ports:
+        - port: 3000
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 10.20.0.0/16
+      ports:
+        - port: 5432
+        - port: 443

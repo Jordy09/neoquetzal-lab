@@ -1,0 +1,33 @@
+rules:
+  - id: neoquetzal-hardcoded-secret
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Secreto o credencial hardcodeado en el codigo (CB-03, CB-09 / T-05, T-13).
+      Debe obtenerse de variables de entorno o AWS Secrets Manager (RS-06).
+    paths:
+      include: ["*.js"]
+    patterns:
+      - pattern-regex: '(JWT_SECRET|DB_PASSWORD|DB_USER|PUSH_API_KEY|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|DATABASE_URL)\s*:\s*"[^"]+"'
+
+  - id: neoquetzal-sql-injection-concat
+    languages: [generic]
+    severity: ERROR
+    message: >-
+      Consulta SQL construida por concatenacion de texto, vulnerable a inyeccion SQL
+      (CB-06 / T-09). Usar consultas parametrizadas con placeholders ? (RS-08).
+    paths:
+      include: ["*.js"]
+    patterns:
+      - pattern-regex: '"\s*\+\s*(usuario|password|req\.params\.id|limit)'
+
+  - id: neoquetzal-error-info-leak
+    languages: [generic]
+    severity: WARNING
+    message: >-
+      El mensaje de error expone detalles internos (consulta SQL) al cliente (T-17).
+      Devolver un error generico y registrar el detalle solo en el log (RS-11).
+    paths:
+      include: ["*.js"]
+    patterns:
+      - pattern-regex: 'error:\s*e\.message'

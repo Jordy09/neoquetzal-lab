@@ -1,0 +1,40 @@
+# NeoQuetzal - Deployment de la API en EKS (VERSION VULNERABLE)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neoquetzal-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: neoquetzal-api
+  template:
+    metadata:
+      labels:
+        app: neoquetzal-api
+    spec:
+      containers:
+        - name: api
+          image: neoquetzal-api:latest          # etiqueta mutable
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_PASSWORD
+              value: "NeoQuetzal2026!"          # secreto en texto plano
+          securityContext:
+            privileged: true                    # contenedor privilegiado
+            runAsUser: 0                        # corre como root
+            allowPrivilegeEscalation: true
+          # sin limites de CPU/memoria, sin probes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neoquetzal-api
+spec:
+  type: LoadBalancer                            # expuesto directo a internet, sin pasar por API Gateway/WAF
+  selector:
+    app: neoquetzal-api
+  ports:
+    - port: 80
+      targetPort: 3000

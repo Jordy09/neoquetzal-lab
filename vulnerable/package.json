@@ -1,0 +1,19 @@
+{
+  "name": "neoquetzal-api-vulnerable",
+  "version": "1.0.0",
+  "description": "NeoQuetzal-lab - API de banca (VERSION CON FALLOS INTENCIONALES para el curso de Seguridad en Aplicaciones)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --experimental-sqlite app.js",
+    "seed": "node --experimental-sqlite db.js"
+  },
+  "author": "Grupo NeoQuetzal - UMG",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.17.1",
+    "jsonwebtoken": "8.5.1",
+    "lodash": "4.17.4",
+    "axios": "0.21.1",
+    "body-parser": "1.19.0"
+  }
+}

@@ -1,0 +1,416 @@
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.5 
+
+terraform scan results:
+
+Passed checks: 48, Failed checks: 86, Skipped checks: 0
+
+Check: CKV_AWS_260: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80"
+	PASSED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_277: "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1"
+	PASSED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_25: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389"
+	PASSED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_24: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22"
+	PASSED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_260: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80"
+	PASSED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_277: "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1"
+	PASSED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_25: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389"
+	PASSED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_93: "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)"
+	PASSED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_93: "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)"
+	PASSED for resource: aws_s3_bucket_policy.kyc_publico
+	File: /main.tf:102-114
+Check: CKV_AWS_93: "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)"
+	PASSED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_133: "Ensure that RDS instances has backup policy"
+	PASSED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_250: "Ensure that RDS PostgreSQL instances use a non vulnerable version with the log_fdw extension (https://aws.amazon.com/security/security-bulletins/AWS-2022-004/)"
+	PASSED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_354: "Ensure RDS Performance Insights are encrypted using KMS CMKs"
+	PASSED for resource: aws_rds_cluster_instance.core_1
+	File: /main.tf:143-149
+Check: CKV_AWS_33: "Ensure KMS key policy does not contain wildcard (*) principal"
+	PASSED for resource: aws_kms_key.datos
+	File: /main.tf:154-157
+Check: CKV_AWS_227: "Ensure KMS key is enabled"
+	PASSED for resource: aws_kms_key.datos
+	File: /main.tf:154-157
+Check: CKV_AWS_61: "Ensure AWS IAM policy does not allow assume role permission across all services"
+	PASSED for resource: aws_iam_role.cicd
+	File: /main.tf:166-176
+Check: CKV_AWS_60: "Ensure IAM role allows only specific services or principals to assume it"
+	PASSED for resource: aws_iam_role.cicd
+	File: /main.tf:166-176
+Check: CKV_AWS_274: "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy"
+	PASSED for resource: aws_iam_role.cicd
+	File: /main.tf:166-176
+Check: CKV_AWS_393: "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role"
+	PASSED for resource: aws_iam_role.cicd
+	File: /main.tf:166-176
+Check: CKV_AWS_274: "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy"
+	PASSED for resource: aws_iam_role_policy_attachment.cicd_admin
+	File: /main.tf:190-193
+Check: CKV_AWS_348: "Ensure IAM root user does not have Access keys"
+	PASSED for resource: aws_iam_access_key.deploy
+	File: /main.tf:200-202
+Check: CKV_AWS_286: "Ensure IAM policies does not allow privilege escalation"
+	PASSED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_62: "Ensure IAM policies that allow full "*-*" administrative privileges are not created"
+	PASSED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_287: "Ensure IAM policies does not allow credentials exposure"
+	PASSED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_63: "Ensure no IAM policies documents allow "*" as a statement's actions"
+	PASSED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_61: "Ensure AWS IAM policy does not allow assume role permission across all services"
+	PASSED for resource: aws_iam_role.eks
+	File: /main.tf:228-238
+Check: CKV_AWS_60: "Ensure IAM role allows only specific services or principals to assume it"
+	PASSED for resource: aws_iam_role.eks
+	File: /main.tf:228-238
+Check: CKV_AWS_274: "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy"
+	PASSED for resource: aws_iam_role.eks
+	File: /main.tf:228-238
+Check: CKV_AWS_393: "Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order on IAM role"
+	PASSED for resource: aws_iam_role.eks
+	File: /main.tf:228-238
+Check: CKV_AWS_339: "Ensure EKS clusters run on a supported Kubernetes version"
+	PASSED for resource: aws_eks_cluster.neoquetzal
+	File: /main.tf:240-251
+Check: CKV_AWS_93: "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)"
+	PASSED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_251: "Ensure CloudTrail logging is enabled"
+	PASSED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_41: "Ensure no hard coded AWS access key and secret key exists in provider"
+	PASSED for resource: aws.default
+	File: /main.tf:17-19
+Check: CKV2_AWS_22: "Ensure an IAM User does not have access to the console"
+	PASSED for resource: aws_iam_user.deploy
+	File: /main.tf:196-198
+Check: CKV2_AWS_40: "Ensure AWS IAM policy does not allow full IAM privileges"
+	PASSED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV2_AWS_77: "Ensure AWS API Gateway Rest API attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability"
+	PASSED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV2_AWS_5: "Ensure that Security Groups are attached to another resource"
+	PASSED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV2_AWS_56: "Ensure AWS Managed IAMFullAccess IAM policy is not used."
+	PASSED for resource: aws_iam_role.cicd
+	File: /main.tf:166-176
+Check: CKV2_AWS_56: "Ensure AWS Managed IAMFullAccess IAM policy is not used."
+	PASSED for resource: aws_iam_role.eks
+	File: /main.tf:228-238
+Check: CKV_AWS_57: "S3 Bucket has an ACL defined which allows public WRITE access."
+	PASSED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_57: "S3 Bucket has an ACL defined which allows public WRITE access."
+	PASSED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_57: "S3 Bucket has an ACL defined which allows public WRITE access."
+	PASSED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_20: "S3 Bucket has an ACL defined which allows public READ access."
+	PASSED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_20: "S3 Bucket has an ACL defined which allows public READ access."
+	PASSED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_20: "S3 Bucket has an ACL defined which allows public READ access."
+	PASSED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_19: "Ensure all data stored in the S3 bucket is securely encrypted at rest"
+	PASSED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_19: "Ensure all data stored in the S3 bucket is securely encrypted at rest"
+	PASSED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_19: "Ensure all data stored in the S3 bucket is securely encrypted at rest"
+	PASSED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_130: "Ensure VPC subnets do not assign public IP by default"
+	FAILED for resource: aws_subnet.publica_a
+	File: /main.tf:29-34
+Check: CKV_AWS_130: "Ensure VPC subnets do not assign public IP by default"
+	FAILED for resource: aws_subnet.publica_b
+	File: /main.tf:36-41
+Check: CKV_AWS_24: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22"
+	FAILED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_382: "Ensure no security groups allow egress from 0.0.0.0:0 to port -1"
+	FAILED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_23: "Ensure every security group and rule has a description"
+	FAILED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV_AWS_382: "Ensure no security groups allow egress from 0.0.0.0:0 to port -1"
+	FAILED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_23: "Ensure every security group and rule has a description"
+	FAILED for resource: aws_security_group.db
+	File: /main.tf:65-83
+Check: CKV_AWS_53: "Ensure S3 bucket has block public ACLS enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.kyc
+	File: /main.tf:93-99
+Check: CKV_AWS_54: "Ensure S3 bucket has block public policy enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.kyc
+	File: /main.tf:93-99
+Check: CKV_AWS_56: "Ensure S3 bucket has 'restrict_public_buckets' enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.kyc
+	File: /main.tf:93-99
+Check: CKV_AWS_55: "Ensure S3 bucket has ignore public ACLs enabled"
+	FAILED for resource: aws_s3_bucket_public_access_block.kyc
+	File: /main.tf:93-99
+Check: CKV_AWS_139: "Ensure that RDS clusters have deletion protection enabled"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_162: "Ensure RDS cluster has IAM authentication enabled"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_313: "Ensure RDS cluster configured to copy tags to snapshots"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_327: "Ensure RDS Clusters are encrypted using KMS CMKs"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_96: "Ensure all data stored in Aurora is securely encrypted at rest"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_324: "Ensure that RDS Cluster log capture is enabled"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV_AWS_17: "Ensure all data stored in RDS is not publicly accessible"
+	FAILED for resource: aws_rds_cluster_instance.core_1
+	File: /main.tf:143-149
+Check: CKV_AWS_353: "Ensure that RDS instances have performance insights enabled"
+	FAILED for resource: aws_rds_cluster_instance.core_1
+	File: /main.tf:143-149
+Check: CKV_AWS_118: "Ensure that enhanced monitoring is enabled for Amazon RDS instances"
+	FAILED for resource: aws_rds_cluster_instance.core_1
+	File: /main.tf:143-149
+Check: CKV_AWS_226: "Ensure DB instance gets all minor upgrades automatically"
+	FAILED for resource: aws_rds_cluster_instance.core_1
+	File: /main.tf:143-149
+Check: CKV_AWS_7: "Ensure rotation for customer created CMKs is enabled"
+	FAILED for resource: aws_kms_key.datos
+	File: /main.tf:154-157
+Check: CKV_AWS_149: "Ensure that Secrets Manager secret is encrypted using KMS CMK"
+	FAILED for resource: aws_secretsmanager_secret.api_core
+	File: /main.tf:159-161
+Check: CKV_AWS_286: "Ensure IAM policies does not allow privilege escalation"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_290: "Ensure IAM policies does not allow write access without constraints"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_288: "Ensure IAM policies does not allow data exfiltration"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_62: "Ensure IAM policies that allow full "*-*" administrative privileges are not created"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_289: "Ensure IAM policies does not allow permissions management / resource exposure without constraints"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_287: "Ensure IAM policies does not allow credentials exposure"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_63: "Ensure no IAM policies documents allow "*" as a statement's actions"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_355: "Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV_AWS_273: "Ensure access is controlled through SSO and not AWS IAM defined users"
+	FAILED for resource: aws_iam_user.deploy
+	File: /main.tf:196-198
+Check: CKV_AWS_290: "Ensure IAM policies does not allow write access without constraints"
+	FAILED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_288: "Ensure IAM policies does not allow data exfiltration"
+	FAILED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_289: "Ensure IAM policies does not allow permissions management / resource exposure without constraints"
+	FAILED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_40: "Ensure IAM policies are attached only to groups or roles (Reducing access management complexity may in-turn reduce opportunity for a principal to inadvertently receive or retain excessive privileges.)"
+	FAILED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_355: "Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
+	FAILED for resource: aws_iam_user_policy.deploy
+	File: /main.tf:204-215
+Check: CKV_AWS_136: "Ensure that ECR repositories are encrypted using KMS"
+	FAILED for resource: aws_ecr_repository.api
+	File: /main.tf:220-226
+Check: CKV_AWS_51: "Ensure ECR Image Tags are immutable"
+	FAILED for resource: aws_ecr_repository.api
+	File: /main.tf:220-226
+Check: CKV_AWS_163: "Ensure ECR image scanning on push is enabled"
+	FAILED for resource: aws_ecr_repository.api
+	File: /main.tf:220-226
+Check: CKV_AWS_37: "Ensure Amazon EKS control plane logging is enabled for all log types"
+	FAILED for resource: aws_eks_cluster.neoquetzal
+	File: /main.tf:240-251
+Check: CKV_AWS_39: "Ensure Amazon EKS public endpoint disabled"
+	FAILED for resource: aws_eks_cluster.neoquetzal
+	File: /main.tf:240-251
+Check: CKV_AWS_58: "Ensure EKS Cluster has Secrets Encryption Enabled"
+	FAILED for resource: aws_eks_cluster.neoquetzal
+	File: /main.tf:240-251
+Check: CKV_AWS_38: "Ensure Amazon EKS public endpoint not accessible to 0.0.0.0/0"
+	FAILED for resource: aws_eks_cluster.neoquetzal
+	File: /main.tf:240-251
+Check: CKV_AWS_36: "Ensure CloudTrail log file validation is enabled"
+	FAILED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_67: "Ensure CloudTrail is enabled in all Regions"
+	FAILED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_252: "Ensure CloudTrail defines an SNS Topic"
+	FAILED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_35: "Ensure CloudTrail logs are encrypted at rest using KMS CMKs"
+	FAILED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_237: "Ensure Create before destroy for API Gateway"
+	FAILED for resource: aws_api_gateway_rest_api.neoquetzal
+	File: /main.tf:271-273
+Check: CKV_AWS_217: "Ensure Create before destroy for API deployments"
+	FAILED for resource: aws_api_gateway_deployment.v1
+	File: /main.tf:275-277
+Check: CKV_AWS_73: "Ensure API Gateway has X-Ray Tracing enabled"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV_AWS_76: "Ensure API Gateway has Access Logging enabled"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV_AWS_120: "Ensure API Gateway caching is enabled"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV2_AWS_8: "Ensure that RDS clusters has backup plan of AWS Backup"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV2_AWS_51: "Ensure AWS API Gateway endpoints uses client certificate authentication"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV2_AWS_11: "Ensure VPC flow logging is enabled in all VPCs"
+	FAILED for resource: aws_vpc.neoquetzal
+	File: /main.tf:24-27
+Check: CKV2_AWS_27: "Ensure Postgres RDS as aws_rds_cluster has Query Logging enabled"
+	FAILED for resource: aws_rds_cluster.core
+	File: /main.tf:128-141
+Check: CKV2_AWS_40: "Ensure AWS IAM policy does not allow full IAM privileges"
+	FAILED for resource: aws_iam_policy.cicd_admin
+	File: /main.tf:178-188
+Check: CKV2_AWS_64: "Ensure KMS key Policy is defined"
+	FAILED for resource: aws_kms_key.datos
+	File: /main.tf:154-157
+Check: CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV2_AWS_57: "Ensure Secrets Manager secrets should have automatic rotation enabled"
+	FAILED for resource: aws_secretsmanager_secret.api_core
+	File: /main.tf:159-161
+Check: CKV2_AWS_5: "Ensure that Security Groups are attached to another resource"
+	FAILED for resource: aws_security_group.admin
+	File: /main.tf:44-62
+Check: CKV2_AWS_12: "Ensure the default security group of every VPC restricts all traffic"
+	FAILED for resource: aws_vpc.neoquetzal
+	File: /main.tf:24-27
+Check: CKV2_AWS_29: "Ensure public API gateway are protected by WAF"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV2_AWS_4: "Ensure API Gateway stage have logging level defined as appropriate"
+	FAILED for resource: aws_api_gateway_stage.prod
+	File: /main.tf:279-283
+Check: CKV2_AWS_10: "Ensure CloudTrail trails are integrated with CloudWatch Logs"
+	FAILED for resource: aws_cloudtrail.principal
+	File: /main.tf:260-266
+Check: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+Check: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.kyc
+	File: /main.tf:88-90
+Check: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.estados_cuenta
+	File: /main.tf:116-118
+Check: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.logs
+	File: /main.tf:256-258
+

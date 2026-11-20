@@ -1,0 +1,213 @@
+
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.4.5 
+Update available 3.4.5 -> 3.4.6
+Run pip3 install -U checkov to update 
+
+
+dockerfile scan results:
+
+Passed checks: 65, Failed checks: 0, Skipped checks: 0
+
+Check: CKV_DOCKER_1: "Ensure port 22 is not exposed"
+	PASSED for resource: fase5/docker/Dockerfile.secure.
+	File: fase5/docker/Dockerfile.secure:1-40
+Check: CKV_DOCKER_7: "Ensure the base image uses a non latest version tag"
+	PASSED for resource: fase5/docker/Dockerfile.secure.FROM
+	File: fase5/docker/Dockerfile.secure:16-16
+Check: CKV_DOCKER_11: "Ensure From Alias are unique for multistage builds."
+	PASSED for resource: fase5/docker/Dockerfile.secure.
+	File: fase5/docker/Dockerfile.secure:1-40
+Check: CKV_DOCKER_9: "Ensure that APT isn't used"
+	PASSED for resource: fase5/docker/Dockerfile.secure.
+	File: fase5/docker/Dockerfile.secure:1-40
+Check: CKV_DOCKER_5: "Ensure update instructions are not use alone in the Dockerfile"
+	PASSED for resource: fase5/docker/Dockerfile.secure.
+	File: fase5/docker/Dockerfile.secure:1-40
+Check: CKV_DOCKER_10: "Ensure that WORKDIR values are absolute paths"
+	PASSED for resource: fase5/docker/Dockerfile.secure.
+	File: fase5/docker/Dockerfile.secure:1-40
+Check: CKV_DOCKER_8: "Ensure the last USER is not root"
+	PASSED for resource: fase5/docker/Dockerfile.secure.USER
+	File: fase5/docker/Dockerfile.secure:33-33
+Check: CKV_DOCKER_2: "Ensure that HEALTHCHECK instructions have been added to container images"
+	PASSED for resource: fase5/docker/Dockerfile.secure.HEALTHCHECK
+	File: fase5/docker/Dockerfile.secure:37-38
+Check: CKV_DOCKER_3: "Ensure that a user for the container has been created"
+	PASSED for resource: fase5/docker/Dockerfile.secure.USER
+	File: fase5/docker/Dockerfile.secure:33-33
+Check: CKV2_DOCKER_3: "Ensure that certificate validation isn't disabled with wget"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_3: "Ensure that certificate validation isn't disabled with wget"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_3: "Ensure that certificate validation isn't disabled with wget"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_16: "Ensure that certificate validation isn't disabled with pip via the 'PIP_TRUSTED_HOST' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_16: "Ensure that certificate validation isn't disabled with pip via the 'PIP_TRUSTED_HOST' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_16: "Ensure that certificate validation isn't disabled with pip via the 'PIP_TRUSTED_HOST' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_16: "Ensure that certificate validation isn't disabled with pip via the 'PIP_TRUSTED_HOST' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.ENV
+	File: fase5/docker/Dockerfile.secure:22-22
+Check: CKV2_DOCKER_13: "Ensure that certificate validation isn't disabled for npm or yarn by setting the option strict-ssl to false"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_13: "Ensure that certificate validation isn't disabled for npm or yarn by setting the option strict-ssl to false"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_13: "Ensure that certificate validation isn't disabled for npm or yarn by setting the option strict-ssl to false"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_1: "Ensure that sudo isn't used"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_1: "Ensure that sudo isn't used"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_1: "Ensure that sudo isn't used"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_5: "Ensure that certificate validation isn't disabled with the PYTHONHTTPSVERIFY environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_5: "Ensure that certificate validation isn't disabled with the PYTHONHTTPSVERIFY environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_5: "Ensure that certificate validation isn't disabled with the PYTHONHTTPSVERIFY environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_5: "Ensure that certificate validation isn't disabled with the PYTHONHTTPSVERIFY environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.ENV
+	File: fase5/docker/Dockerfile.secure:22-22
+Check: CKV2_DOCKER_10: "Ensure that packages with untrusted or missing signatures are not used by rpm via the '--nodigest', '--nosignature', '--noverify', or '--nofiledigest' options"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_10: "Ensure that packages with untrusted or missing signatures are not used by rpm via the '--nodigest', '--nosignature', '--noverify', or '--nofiledigest' options"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_10: "Ensure that packages with untrusted or missing signatures are not used by rpm via the '--nodigest', '--nosignature', '--noverify', or '--nofiledigest' options"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_6: "Ensure that certificate validation isn't disabled with the NODE_TLS_REJECT_UNAUTHORIZED environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_6: "Ensure that certificate validation isn't disabled with the NODE_TLS_REJECT_UNAUTHORIZED environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_6: "Ensure that certificate validation isn't disabled with the NODE_TLS_REJECT_UNAUTHORIZED environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_6: "Ensure that certificate validation isn't disabled with the NODE_TLS_REJECT_UNAUTHORIZED environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.ENV
+	File: fase5/docker/Dockerfile.secure:22-22
+Check: CKV2_DOCKER_14: "Ensure that certificate validation isn't disabled for git by setting the environment variable 'GIT_SSL_NO_VERIFY' to any value"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_14: "Ensure that certificate validation isn't disabled for git by setting the environment variable 'GIT_SSL_NO_VERIFY' to any value"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_14: "Ensure that certificate validation isn't disabled for git by setting the environment variable 'GIT_SSL_NO_VERIFY' to any value"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_14: "Ensure that certificate validation isn't disabled for git by setting the environment variable 'GIT_SSL_NO_VERIFY' to any value"
+	PASSED for resource: fase5/docker/Dockerfile.secure.ENV
+	File: fase5/docker/Dockerfile.secure:22-22
+Check: CKV2_DOCKER_11: "Ensure that the '--force-yes' option is not used, as it disables signature validation and allows packages to be downgraded which can leave the system in a broken or inconsistent state"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_11: "Ensure that the '--force-yes' option is not used, as it disables signature validation and allows packages to be downgraded which can leave the system in a broken or inconsistent state"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_11: "Ensure that the '--force-yes' option is not used, as it disables signature validation and allows packages to be downgraded which can leave the system in a broken or inconsistent state"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_7: "Ensure that packages with untrusted or missing signatures are not used by apk via the '--allow-untrusted' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_7: "Ensure that packages with untrusted or missing signatures are not used by apk via the '--allow-untrusted' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_7: "Ensure that packages with untrusted or missing signatures are not used by apk via the '--allow-untrusted' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_17: "Ensure that 'chpasswd' is not used to set or remove passwords"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_17: "Ensure that 'chpasswd' is not used to set or remove passwords"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_17: "Ensure that 'chpasswd' is not used to set or remove passwords"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_12: "Ensure that certificate validation isn't disabled for npm via the 'NPM_CONFIG_STRICT_SSL' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_12: "Ensure that certificate validation isn't disabled for npm via the 'NPM_CONFIG_STRICT_SSL' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_12: "Ensure that certificate validation isn't disabled for npm via the 'NPM_CONFIG_STRICT_SSL' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_12: "Ensure that certificate validation isn't disabled for npm via the 'NPM_CONFIG_STRICT_SSL' environment variable"
+	PASSED for resource: fase5/docker/Dockerfile.secure.ENV
+	File: fase5/docker/Dockerfile.secure:22-22
+Check: CKV2_DOCKER_2: "Ensure that certificate validation isn't disabled with curl"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_2: "Ensure that certificate validation isn't disabled with curl"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_2: "Ensure that certificate validation isn't disabled with curl"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_9: "Ensure that packages with untrusted or missing GPG signatures are not used by dnf, tdnf, or yum via the '--nogpgcheck' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_9: "Ensure that packages with untrusted or missing GPG signatures are not used by dnf, tdnf, or yum via the '--nogpgcheck' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_9: "Ensure that packages with untrusted or missing GPG signatures are not used by dnf, tdnf, or yum via the '--nogpgcheck' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_8: "Ensure that packages with untrusted or missing signatures are not used by apt-get via the '--allow-unauthenticated' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_8: "Ensure that packages with untrusted or missing signatures are not used by apt-get via the '--allow-unauthenticated' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_8: "Ensure that packages with untrusted or missing signatures are not used by apt-get via the '--allow-unauthenticated' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_15: "Ensure that the yum and dnf package managers are not configured to disable SSL certificate validation via the 'sslverify' configuration option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_15: "Ensure that the yum and dnf package managers are not configured to disable SSL certificate validation via the 'sslverify' configuration option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_15: "Ensure that the yum and dnf package managers are not configured to disable SSL certificate validation via the 'sslverify' configuration option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+Check: CKV2_DOCKER_4: "Ensure that certificate validation isn't disabled with the pip '--trusted-host' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:12-13
+Check: CKV2_DOCKER_4: "Ensure that certificate validation isn't disabled with the pip '--trusted-host' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:24-24
+Check: CKV2_DOCKER_4: "Ensure that certificate validation isn't disabled with the pip '--trusted-host' option"
+	PASSED for resource: fase5/docker/Dockerfile.secure.RUN
+	File: fase5/docker/Dockerfile.secure:19-21
+
