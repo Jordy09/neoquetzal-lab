@@ -4,8 +4,8 @@
 #   docker build -f docker/Dockerfile.vulnerable -t neoquetzal-api:vulnerable vulnerable/
 # =====================================================================
 
-# Imagen base completa (Debian bullseye) y version vieja de Node 22: cientos de CVE del SO
-FROM node:22.1.0-bullseye
+# Imagen base completa (Debian bookworm) y version vieja de Node 22: cientos de CVE del SO
+FROM node:22.1.0-bookworm
 
 # Secretos dentro de la imagen (cualquiera que haga "docker history" los ve) - CB-03 / CB-09
 ENV JWT_SECRET=neoquetzal-secreto-123 \
