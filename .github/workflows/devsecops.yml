@@ -1,0 +1,72 @@
+name: DevSecOps NeoQuetzal
+
+# Pipeline de seguridad del Entregable 2 (Fase 3).
+# Se ejecuta en cada push y pull request. Integra:
+#   - SAST   (Semgrep)
+#   - Secrets (Gitleaks)
+#   - SCA     (npm audit + OWASP Dependency-Check)
+
+# En el Entregable 3 este pipeline queda de ejecucion manual para no mezclarlo
+# con el pipeline de la Fase 5 (fase5-iac-contenedores.yml).
+on:
+  workflow_dispatch:
+
+jobs:
+  # ---------------------------------------------------------
+  # 1) SAST - Analisis estatico del codigo fuente
+  # ---------------------------------------------------------
+  sast-semgrep:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ejecutar Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/javascript
+            p/owasp-top-ten
+
+  # ---------------------------------------------------------
+  # 2) Escaneo de secretos en el repositorio
+  # ---------------------------------------------------------
+  secrets-gitleaks:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ejecutar Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ---------------------------------------------------------
+  # 3) SCA - Analisis de dependencias (CVEs conocidos)
+  # ---------------------------------------------------------
+  sca-dependencies:
+    name: SCA (npm audit + Dependency-Check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: npm audit (version vulnerable)
+        working-directory: ./vulnerable
+        run: npm install --package-lock-only && npm audit || true
+
+      - name: OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "NeoQuetzal"
+          path: "./vulnerable"
+          format: "HTML"
+      - name: Guardar reporte
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-dependency-check
+          path: ${{ github.workspace }}/reports
